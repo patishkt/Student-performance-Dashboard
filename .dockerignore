@@ -1,0 +1,14 @@
+.git
+.agents
+.codex
+.venv
+__pycache__
+*.pyc
+*.log
+*.pdf
+*.xlsx
+tmp
+backend/vendor
+backend_server.log
+uvicorn.err.log
+uvicorn.out.log

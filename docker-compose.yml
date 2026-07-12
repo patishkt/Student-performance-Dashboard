@@ -1,0 +1,40 @@
+services:
+  mongodb:
+    image: mongo:7
+    container_name: student-performance-mongodb
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb_data:/data/db
+
+  backend:
+    build:
+      context: .
+      dockerfile: Dockerfile.backend
+    container_name: student-performance-backend
+    restart: unless-stopped
+    environment:
+      MONGODB_URI: mongodb://mongodb:27017
+      MONGODB_DB_NAME: student_performance
+      PASS_MARK: 40
+      SEED_ON_START: "true"
+      TRAIN_MODEL_ON_START: "true"
+    depends_on:
+      - mongodb
+    ports:
+      - "8001:8001"
+
+  frontend:
+    build:
+      context: .
+      dockerfile: Dockerfile.frontend
+    container_name: student-performance-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  mongodb_data:
